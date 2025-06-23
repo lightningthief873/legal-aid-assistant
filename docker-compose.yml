@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: legal-aid-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./legal_aid.db
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - USE_LOCAL_LLM=${USE_LOCAL_LLM:-false}
+      - LOCAL_LLM_URL=${LOCAL_LLM_URL:-}
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-in-production}
+      - DEBUG=${DEBUG:-false}
+    volumes:
+      - ./backend/generated_documents:/app/generated_documents
+      - ./backend/legal_aid.db:/app/legal_aid.db
+    networks:
+      - legal-aid-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend/legal-aid-frontend
+      dockerfile: Dockerfile
+    container_name: legal-aid-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - legal-aid-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Optional: Local LLM service (uncomment if using local LLM)
+  # local-llm:
+  #   image: ollama/ollama:latest
+  #   container_name: legal-aid-llm
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+  #   networks:
+  #     - legal-aid-network
+  #   restart: unless-stopped
+
+networks:
+  legal-aid-network:
+    driver: bridge
+
+volumes:
+  # ollama_data:  # Uncomment if using local LLM
+  backend_data:
+    driver: local
+
