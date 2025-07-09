@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from typing import List
 import json
 
@@ -184,4 +185,3 @@ async def get_issue_advice(
         ))
     
     return response_data
-

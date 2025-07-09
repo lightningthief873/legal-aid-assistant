@@ -3,38 +3,106 @@ Database initialization script to populate the database with default templates a
 """
 
 import json
+import sys
+import os
+
+# Add the parent directory to the path so we can import app modules
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from sqlalchemy.orm import Session
 from app.core.database import SessionLocal, engine
-from app.models.database import Base, DocumentTemplate, LegalResource
+from app.models.database import Base, DocumentTemplate, LegalResource, LegalIssue, LegalAdvice, GeneratedDocument
 
-def init_database():
+def init_database(clear_data=False):
     """Initialize database with default data."""
     
-    # Create all tables
-    Base.metadata.create_all(bind=engine)
-    
-    # Create session
-    db = SessionLocal()
-    
     try:
-        # Check if data already exists
-        if db.query(DocumentTemplate).first():
-            print("Database already initialized with templates.")
-            return
+        # Create all tables
+        print("Creating database tables...")
+        Base.metadata.create_all(bind=engine)
+        print("Tables created successfully!")
         
-        # Create document templates
-        create_document_templates(db)
+        # Create session
+        db = SessionLocal()
         
-        # Create legal resources
-        create_legal_resources(db)
-        
-        print("Database initialized successfully!")
-        
+        try:
+            # Clear existing data if requested
+            if clear_data:
+                clear_table_data(db)
+                print("Existing data cleared!")
+            
+            # Check if data already exists (skip if we just cleared)
+            if not clear_data:
+                existing_templates = db.query(DocumentTemplate).first()
+                if existing_templates:
+                    print("Database already initialized with templates.")
+                    return
+            
+            # Create document templates
+            create_document_templates(db)
+            
+            # Create legal resources
+            create_legal_resources(db)
+            
+            print("Database initialized successfully!")
+            
+        except Exception as e:
+            print(f"Error initializing database: {e}")
+            db.rollback()
+            raise
+        finally:
+            db.close()
+            
     except Exception as e:
-        print(f"Error initializing database: {e}")
-        db.rollback()
-    finally:
-        db.close()
+        print(f"Error creating database: {e}")
+        raise
+
+def clear_table_data(db: Session):
+    """Clear all data from tables while preserving schema."""
+    print("Clearing existing data...")
+    
+    # Clear tables in order to respect foreign key constraints
+    # Child tables first (tables with foreign keys), then parent tables
+    
+    # 1. Clear GeneratedDocument (has foreign keys to both LegalIssue and DocumentTemplate)
+    db.query(GeneratedDocument).delete()
+    print("Cleared GeneratedDocument table")
+    
+    # 2. Clear LegalAdvice (has foreign key to LegalIssue)
+    db.query(LegalAdvice).delete()
+    print("Cleared LegalAdvice table")
+    
+    # 3. Clear parent tables (no foreign key dependencies)
+    db.query(LegalIssue).delete()
+    print("Cleared LegalIssue table")
+    
+    db.query(DocumentTemplate).delete()
+    print("Cleared DocumentTemplate table")
+    
+    db.query(LegalResource).delete()
+    print("Cleared LegalResource table")
+    
+    # Alternative: Dynamic approach (uncomment if you prefer)
+    # This will clear ALL tables automatically in the correct order
+    # for table in reversed(Base.metadata.sorted_tables):
+    #     db.execute(table.delete())
+    #     print(f"Cleared {table.name} table")
+    
+    # Commit the deletions
+    db.commit()
+    print("All data cleared successfully!")
+
+def clear_database_only():
+    """Function to only clear data without reinitializing."""
+    try:
+        db = SessionLocal()
+        try:
+            clear_table_data(db)
+        finally:
+            db.close()
+    except Exception as e:
+        print(f"Error clearing database: {e}")
+        raise
 
 def create_document_templates(db: Session):
     """Create default document templates."""
@@ -341,5 +409,15 @@ The denial reason given was: {{denial_reason}}
 I believe this denial is incorrect and request that you reconsider this decision."""
 
 if __name__ == "__main__":
-    init_database()
-
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Initialize database')
+    parser.add_argument('--clear', action='store_true', help='Clear existing data before initializing')
+    parser.add_argument('--clear-only', action='store_true', help='Only clear data, do not reinitialize')
+    
+    args = parser.parse_args()
+    
+    if args.clear_only:
+        clear_database_only()
+    else:
+        init_database(clear_data=args.clear)

@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./legal_aid.db"
     
     # OpenAI settings
-    openai_api_key: Optional[str] = None
+    openai_api_key: Optional[str] = "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"
     openai_model: str = "gpt-3.5-turbo"
     openai_max_tokens: int = 1000
     openai_temperature: float = 0.7

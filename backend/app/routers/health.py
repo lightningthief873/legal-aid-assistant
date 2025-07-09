@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from datetime import datetime
 import os
 
@@ -15,10 +16,11 @@ async def health_check(db: Session = Depends(get_db)):
     Health check endpoint to verify system status.
     """
     try:
-        # Test database connection
-        db.execute("SELECT 1")
+        # Test database connection using SQLAlchemy 2.0+ syntax
+        db.execute(text("SELECT 1"))
         database_connected = True
-    except Exception:
+    except Exception as e:
+        print(f"Database connection error: {e}")
         database_connected = False
     
     # Test LLM availability
@@ -62,4 +64,3 @@ async def app_info():
         ],
         "api_docs": "/api/docs"
     }
-

@@ -24,9 +24,12 @@ class LegalCategory(str, Enum):
 class DocumentType(str, Enum):
     DEMAND_LETTER = "demand_letter"
     COMPLAINT_LETTER = "complaint_letter"
-    NOTICE = "notice"
-    RESPONSE = "response"
-    PETITION = "petition"
+    TENANT_DEMAND = "tenant_demand"
+    DEBT_VALIDATION = "debt_validation"
+    EMPLOYMENT_COMPLAINT = "employment_complaint"
+    SECURITY_DEPOSIT = "security_deposit"
+    CEASE_DESIST = "cease_desist"
+    INSURANCE_APPEAL = "insurance_appeal"
 
 # Request Models
 class LegalIssueCreate(BaseModel):

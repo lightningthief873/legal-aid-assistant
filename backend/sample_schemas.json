@@ -1,0 +1,156 @@
+{
+  "schemas": [
+    {
+      "name": "Tenant Demand for Repairs",
+      "description": "Generate a demand letter for landlord repairs",
+      "endpoint": "POST /api/documents/generate",
+      "schema": {
+        "issue_id": 1,
+        "template_id": 3,
+        "document_type": "tenant_demand",
+        "custom_data": {
+          "sender_name": "John Doe",
+          "sender_address": "123 Main St, Apt 4B, New York, NY 10001",
+          "recipient_name": "ABC Property Management",
+          "recipient_address": "456 Landlord Ave, New York, NY 10002",
+          "landlord_name": "ABC Property Management",
+          "property_address": "123 Main St, Apt 4B, New York, NY 10001",
+          "issue_details": "Broken heating system - no heat for 3 weeks during winter season",
+          "deadline": "7"
+        }
+      }
+    },
+    {
+      "name": "Consumer Complaint Letter",
+      "description": "Generate a complaint letter for defective products",
+      "endpoint": "POST /api/documents/generate",
+      "schema": {
+        "issue_id": 2,
+        "template_id": 2,
+        "document_type": "complaint_letter",
+        "custom_data": {
+          "sender_name": "Jane Smith",
+          "sender_address": "789 Consumer Ave, Los Angeles, CA 90210",
+          "recipient_name": "TechStore Customer Service",
+          "recipient_address": "321 Business Blvd, Los Angeles, CA 90211",
+          "complaint_details": "Defective laptop model XYZ123 purchased on 01/15/2024 stopped working after 2 weeks. Store refuses to honor warranty despite valid receipt and warranty coverage."
+        }
+      }
+    },
+    {
+      "name": "Debt Validation Request",
+      "description": "Generate a debt validation request letter",
+      "endpoint": "POST /api/documents/generate",
+      "schema": {
+        "issue_id": 3,
+        "template_id": 4,
+        "document_type": "debt_validation",
+        "custom_data": {
+          "sender_name": "Bob Wilson",
+          "sender_address": "555 Debtor St, Chicago, IL 60601",
+          "recipient_name": "XYZ Collections Agency",
+          "recipient_address": "999 Collector Rd, Chicago, IL 60602",
+          "collector_name": "XYZ Collections Agency",
+          "collector_address": "999 Collector Rd, Chicago, IL 60602",
+          "debt_amount": "2,500.00",
+          "account_number": "ACC-123456789"
+        }
+      }
+    },
+    {
+      "name": "Employment Discrimination Complaint",
+      "description": "Generate an employment discrimination complaint letter",
+      "endpoint": "POST /api/documents/generate",
+      "schema": {
+        "issue_id": 4,
+        "template_id": 5,
+        "document_type": "employment_complaint",
+        "custom_data": {
+          "sender_name": "Mary Johnson",
+          "sender_address": "777 Employee Lane, Houston, TX 77001",
+          "recipient_name": "ABC Corporation HR Department",
+          "recipient_address": "123 Corporate Plaza, Houston, TX 77002",
+          "employer_name": "ABC Corporation",
+          "employer_address": "123 Corporate Plaza, Houston, TX 77002",
+          "incident_details": "Terminated on 02/15/2024 after reporting workplace harassment by supervisor John Manager on 02/10/2024. Believe termination was retaliation for harassment report.",
+          "witnesses": "Sarah Coworker, Mike Colleague"
+        }
+      }
+    },
+    {
+      "name": "Security Deposit Demand",
+      "description": "Generate a security deposit return demand letter",
+      "endpoint": "POST /api/documents/generate",
+      "schema": {
+        "issue_id": 1,
+        "template_id": 6,
+        "document_type": "security_deposit_demand",
+        "custom_data": {
+          "sender_name": "John Doe",
+          "sender_address": "123 Main St, Apt 4B, New York, NY 10001",
+          "recipient_name": "ABC Property Management",
+          "recipient_address": "456 Landlord Ave, New York, NY 10002",
+          "landlord_name": "ABC Property Management",
+          "property_address": "123 Main St, Apt 4B, New York, NY 10001",
+          "deposit_amount": "1,500.00",
+          "move_out_date": "March 1, 2024"
+        }
+      }
+    },
+    {
+      "name": "Insurance Claim Appeal",
+      "description": "Generate an insurance claim appeal letter",
+      "endpoint": "POST /api/documents/generate",
+      "schema": {
+        "issue_id": 5,
+        "template_id": 8,
+        "document_type": "insurance_appeal",
+        "custom_data": {
+          "sender_name": "David Brown",
+          "sender_address": "888 Patient Blvd, Miami, FL 33101",
+          "recipient_name": "HealthCare Insurance Company",
+          "recipient_address": "222 Insurance Plaza, Miami, FL 33102",
+          "insurance_company": "HealthCare Insurance Company",
+          "policy_number": "POL-987654321",
+          "claim_number": "CLM-456789123",
+          "denial_reason": "Procedure deemed experimental despite being FDA approved and medically necessary"
+        }
+      }
+    },
+    {
+      "name": "Cease and Desist Letter",
+      "description": "Generate a cease and desist letter",
+      "endpoint": "POST /api/documents/generate",
+      "schema": {
+        "issue_id": 3,
+        "template_id": 7,
+        "document_type": "cease_desist",
+        "custom_data": {
+          "sender_name": "Bob Wilson",
+          "sender_address": "555 Debtor St, Chicago, IL 60601",
+          "recipient_name": "XYZ Collections Agency",
+          "recipient_address": "999 Collector Rd, Chicago, IL 60602",
+          "harassment_details": "excessive phone calls (10+ per day), calling outside allowed hours, and threatening illegal actions"
+        }
+      }
+    },
+    {
+      "name": "General Demand Letter",
+      "description": "Generate a general demand letter for payment",
+      "endpoint": "POST /api/documents/generate",
+      "schema": {
+        "issue_id": 2,
+        "template_id": 1,
+        "document_type": "demand_letter",
+        "custom_data": {
+          "sender_name": "Jane Smith",
+          "sender_address": "789 Consumer Ave, Los Angeles, CA 90210",
+          "recipient_name": "TechStore",
+          "recipient_address": "321 Business Blvd, Los Angeles, CA 90211",
+          "amount": "1,299.99",
+          "deadline": "14"
+        }
+      }
+    }
+  ]
+}

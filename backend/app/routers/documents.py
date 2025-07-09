@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from typing import List
 import json
 import os
@@ -225,4 +226,3 @@ async def delete_document(
     db.commit()
     
     return {"message": "Document deleted successfully"}
-
